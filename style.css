@@ -1,0 +1,225 @@
+:root {
+  --ink: #382541;
+  --wine: #7f3657;
+  --paper: #fffaf4;
+  --envelope: #e9c6c4;
+  --envelope-shadow: #d7aaa9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100svh;
+  margin: 0;
+  padding: 1.5rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  color: var(--paper);
+  font-family: "DM Sans", sans-serif;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(236, 159, 174, .22), transparent 28rem),
+    radial-gradient(circle at 80% 85%, rgba(150, 98, 154, .28), transparent 30rem),
+    linear-gradient(135deg, #171b3c, #401f48);
+}
+
+.page-intro {
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.page-intro p {
+  margin: 0;
+  font-size: .78rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  opacity: .7;
+}
+
+.page-intro h1 {
+  margin: .25rem 0 0;
+  font: italic 600 clamp(1.5rem, 4vw, 2.3rem) "Playfair Display", serif;
+}
+
+.envelope-scene {
+  width: min(88vw, 31rem);
+  margin-top: clamp(10rem, 22vh, 11rem);
+  perspective: 1100px;
+}
+
+.envelope {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.45 / 1;
+  cursor: pointer;
+  filter: drop-shadow(0 1.5rem 1.25rem rgba(11, 8, 29, .34));
+}
+
+.envelope:focus-visible {
+  outline: .2rem solid #f8d9bc;
+  outline-offset: .45rem;
+  border-radius: .25rem;
+}
+
+.envelope-back,
+.envelope-front,
+.flap {
+  position: absolute;
+  inset: 0;
+}
+
+.envelope-back {
+  z-index: 1;
+  background: var(--envelope-shadow);
+  border-radius: .25rem;
+}
+
+.letter {
+  position: absolute;
+  z-index: 2;
+  left: 7%;
+  bottom: 7%;
+  width: 86%;
+  height: 83%;
+  padding: clamp(1.2rem, 4vw, 2.35rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+  pointer-events: none;
+  color: var(--ink);
+  background: var(--paper);
+  border-radius: .2rem;
+  box-shadow: 0 .4rem 1.1rem rgba(54, 30, 50, .18);
+  transform: translateY(0);
+  transition:
+    transform .65s cubic-bezier(.22, .75, .25, 1.1),
+    z-index 0s linear 0s;
+}
+
+.letter .heart {
+  display: block;
+  color: #bd5871;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.letter .date {
+  margin: .45rem 0 1.2rem;
+  color: #9a7180;
+  font-size: .73rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.letter h2 {
+  margin: 0 0 .75rem;
+  font: 600 clamp(1.4rem, 4vw, 2rem) "Playfair Display", serif;
+}
+
+.letter p {
+  margin: 0 0 .9rem;
+  font-size: clamp(.82rem, 2.3vw, .98rem);
+  line-height: 1.65;
+}
+
+.letter .signature {
+  margin-top: 1.3rem;
+  color: var(--wine);
+  font: italic 600 1.25rem "Playfair Display", serif;
+}
+
+.envelope-front {
+  z-index: 3;
+  background: var(--envelope);
+  clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+  border-radius: 0 0 .25rem .25rem;
+}
+
+.flap {
+  z-index: 4;
+  background: #f3d5d1;
+  clip-path: polygon(0 0, 100% 0, 50% 55%);
+  transform-origin: top center;
+  backface-visibility: hidden;
+  transition:
+    transform .55s cubic-bezier(.4, 0, .2, 1),
+    z-index 0s linear .28s;
+}
+
+.seal {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 55%;
+  display: grid;
+  width: clamp(2.1rem, 7vw, 3.15rem);
+  aspect-ratio: 1;
+  place-items: center;
+  color: #fff4eb;
+  font-size: clamp(.85rem, 3vw, 1.15rem);
+  background: var(--wine);
+  border: .16rem solid #a94a68;
+  border-radius: 50%;
+  box-shadow: 0 .12rem .15rem rgba(57, 23, 43, .18);
+  transform: translate(-50%, -50%);
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.envelope.is-open .flap {
+  z-index: 1;
+  transform: rotateX(180deg);
+}
+
+.envelope.is-open .letter {
+  z-index: 5;
+  pointer-events: auto;
+  transform: translateY(-65%);
+  transition:
+    transform .65s cubic-bezier(.22, .75, .25, 1.1) .2s,
+    z-index 0s linear .3s;
+}
+
+.envelope.is-open .seal {
+  opacity: 0;
+  transform: translate(-50%, -35%) scale(.75);
+}
+
+.hint {
+  margin: 1.5rem 0 0;
+  min-height: 1.25rem;
+  text-align: center;
+  font-size: .82rem;
+  letter-spacing: .07em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .envelope.is-open + .hint {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 400px) {
+  .letter {
+    padding: 1rem 1.15rem;
+  }
+
+  .letter .date {
+    margin-bottom: .75rem;
+  }
+
+  .letter p {
+    line-height: 1.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letter,
+  .flap,
+  .seal {
+    transition-duration: .01ms;
+    transition-delay: 0s;
+  }
+}
